@@ -1,0 +1,23 @@
+<script type='text/javascript'>
+   var searchTerm ="<%= searchTerms %>";
+   var array = searchTerm.split(',');
+   
+   var final = [];
+   
+   array.forEach(function(item){
+      final.push({title: item});
+   });
+   
+   $('.ui.search').search({
+      source: final,
+      onSelect: function(result) {
+         window.location.href = window.location.href + 'search/'+result.title;
+      }
+   });
+   
+   function redirectSearch(){
+      var url = window.location.href +"search/"+ document.getElementById("search").value;
+      location.href=url;
+      return false;
+   }
+</script>

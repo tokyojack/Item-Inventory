@@ -31,7 +31,7 @@
          <a href="/" class="item" id="home">Home</a>
          
          <div class="item">
-            <form action="/search" method="POST">
+            <form onSubmit="return redirectSearch();">
                <div class="ui search">
                   <div class="ui icon input">
                      <input id="search" class="prompt" type="text"  name="name" placeholder="Search Inventory">

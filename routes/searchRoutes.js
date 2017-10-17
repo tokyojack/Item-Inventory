@@ -14,8 +14,10 @@ module.exports = function(pool) {
                 return;
             }
 
+            var search = req.params.search;
+
             var q = "SELECT * FROM " + inventoryName + " AS inventory WHERE name=?";
-            conn.query(q, req.params.search, function(err, results) {
+            conn.query(q, search, function(err, results) {
                 conn.release();
                 if (flashUtils.isDatabaseError(req, res, '/', err))
                     return;
@@ -39,7 +41,7 @@ module.exports = function(pool) {
                                 itemsProcessed++;
 
                                 if (itemsProcessed === array.length) {
-                                    res.render("index.ejs", { inventory: results, images: images });
+                                    res.render("index.ejs", { inventory: results, images: images, success: 'You\'ve searched up ' + search });
                                 }
                             });
                     });
@@ -50,12 +52,5 @@ module.exports = function(pool) {
             });
         });
     });
-
-
-    //This may not be the best way todo this;
-    router.post("/", function(req, res) {
-        flashUtils.successMessage(req, res, '/search/' + req.body.name, "You searched " + req.body.name);
-    });
-
     return router;
 }
