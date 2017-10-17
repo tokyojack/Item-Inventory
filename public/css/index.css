@@ -1,0 +1,64 @@
+#home {
+    font-size: 2.1em;
+}
+
+#fileIcon {
+    font-size: 3em;
+}
+
+#search {
+    padding: 6.786px 10px 6.768px 10px !important;
+}
+
+#submit_button {
+    padding-left: 1.375em;
+    padding-right: 1.375em;
+    font-size: 1.10em;
+}
+
+#container {
+    margin-top: 7.0em;
+}
+
+.margin_left {
+       display: inline-block;
+    margin-left: 0.625em !important;
+}
+
+.noBorder {
+    border: 0 !important;
+    border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+}
+
+/* Better phone support */
+
+@media (max-width: 480px) {
+    #container {
+        padding-top: 11.25em;
+    }
+
+    #submit_button {
+        margin: 0 !important;
+        margin-top: 9.286px !important;
+    }
+}
+
+@media(max-width: 320px) {
+    #container {
+        padding-top: 13.75em;
+    }
+
+    #submit_button {
+        margin: 0.625em 0 0 0 !important;
+        display: block;
+    }
+
+    #amount {
+        margin-top: 0.625em;
+    }
+    
+    .padding_left {
+        padding-left: 0 !important;
+    }
+}

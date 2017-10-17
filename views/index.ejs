@@ -1,0 +1,40 @@
+<% include ./partials/header.ejs %>
+
+<% var searchTerms = [] %>
+<div class="ui main text container">
+   <div class="ui huge header">Inventory</div>
+   <div class="ui top attached segment">
+      <% if(inventory.length >= 1){ %>
+      <div class="ui divided items">
+         <% for (var i=0; i < inventory.length; i++){ %>
+         <% var item = inventory[i].name %>
+         <% searchTerms.push(item) %>
+         
+         <div class="item">
+            
+            <div class="image">
+               <img src=<%= images[inventory[i].name] %>>
+            </div>
+            
+            <div class="content">
+               <h4>
+                  <%= inventory[i].name %>
+                  <a class="ui right floated basic red button" href="/delete/<%= inventory[i].name %>">Delete <i class="right remove circle icon"></i></a>
+               </h4>
+               
+               <div class="meta">
+                  <p>Amount: <%= inventory[i].amount %></p>
+               </div>
+            </div>
+            
+         </div>
+         <% }; %>
+      </div>
+      <% } else { %>
+      <h1>No items found</h1>
+      <% } %>
+   </div>
+</div>
+
+<% include ../public/js/searchFill.ejs %>
+<% include ./partials/footer.ejs %>

@@ -1,0 +1,13 @@
+<script type='text/javascript'>
+
+   var searchTerm ="<%= searchTerms %>";
+   var array = searchTerm.split(',');
+   
+   var final = [];
+   
+   array.forEach(function(item){
+      final.push({title: item});
+   });
+   
+   $('.ui.search').search({ source: final });
+</script>

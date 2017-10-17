@@ -1,0 +1,29 @@
+{
+  "name": "Item_Inventory",
+  "version": "1.0.0",
+  "description": "Have an inventory of items where you can add, remove and search items.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tokyojack/Item-Inventory.git"
+  },
+  "author": "Jack Clarke",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tokyojack/Item-Inventory/issues"
+  },
+  "homepage": "https://github.com/tokyojack/Item-Inventory#readme",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "express-flash": "git://github.com/RGBboy/express-flash.git",
+    "express-session": "^1.15.5",
+    "http": "0.0.0",
+    "images-scraper": "^2.0.11",
+    "mysql": "^2.14.1"
+  }
+}
