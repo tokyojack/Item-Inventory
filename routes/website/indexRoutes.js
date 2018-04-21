@@ -2,21 +2,24 @@ var router = require("express").Router();
 var Scraper = require('images-scraper');
 var bing = new Scraper.Bing();
 
-var inventoryName = require('../config').tableName;
 var utils = require('../utils/utils');
 var flashUtils = require('../utils/flashUtils');
 
-module.exports = function(pool) {
-    router.get("/", function(req, res) {
-        pool.getConnection(function(err, conn) {
+// URL: "/"
+module.exports = function (pool) {
+
+    // "index.ejs" page. Load's all the items from the database, then links a random image that is related to it's name, to it.
+    router.get("/", function (req, res) {
+        pool.getConnection(function (err, connection) {
             if (flashUtils.isDatabaseError(req, res, '/', err)) {
-                conn.release();
+                connection.release();
                 return;
             }
 
-            var q = "SELECT * FROM " + inventoryName + " AS inventory";
-            conn.query(q, function(err, results) {
-                conn.release();
+            var selectItems = require("./queries/selectItems.sql");
+
+            connection.query(selectItems, function (err, results) {
+                connection.release();
                 if (flashUtils.isDatabaseError(req, res, '/', err))
                     return;
 
@@ -26,37 +29,45 @@ module.exports = function(pool) {
                     var finals = [];
                     var images = new Object();
 
-                    results.forEach(function(item, index, array) {
+                    results.forEach(function (item, index, array) {
                         bing.list({
                                 keyword: item.name,
                                 num: 1,
                                 detail: true
                             })
-                            .then(function(result) {
+                            .then(function (result) {
 
                                 finals.push(result[0].url);
                                 images[item.name] = result[0].url;
                                 itemsProcessed++;
 
+                                // When all items have been processed
                                 if (itemsProcessed === array.length) {
-                                    res.render("index.ejs", { inventory: results, images: images });
+                                    res.render("index.ejs", {
+                                        inventory: results,
+                                        images: images
+                                    });
                                 }
                             });
                     });
 
+                } else {
+                    // If there aren't any items
+                    res.render("index.ejs", {
+                        inventory: [],
+                        images: []
+                    });
                 }
-                else
-                    res.render("index.ejs", { inventory: [], images: [] });
             });
         });
     });
 
-    router.post("/", function(req, res) {
+    // Insert's new item on form submit
+    router.post("/", function (req, res) {
         if (utils.isEmpty(req.body.name)) {
             flashUtils.errorMessage(req, res, '/', 'The name input is empty!');
             return;
         }
-
 
         if (utils.isEmpty(req.body.amount)) {
             flashUtils.errorMessage(req, res, '/', 'The amount input is empty!');
@@ -73,25 +84,27 @@ module.exports = function(pool) {
                 num: 1,
                 detail: true
             })
-            .then(function(result) {
+            .then(function (result) {
                 if (result[0].url === undefined)
                     return;
 
-                pool.getConnection(function(err, conn) {
+                pool.getConnection(function (err, connection) {
                     if (flashUtils.isDatabaseError(req, res, '/', err)) {
-                        conn.release();
+                        connection.release();
                         return;
                     }
-                    var q = "INSERT INTO " + inventoryName + " SET ? ON DUPLICATE KEY UPDATE amount = amount + " + item.amount;
-                    conn.query(q, item, function(err, results) {
-                        conn.release();
+
+                    var insertItem = require("./queries/insertItem.sql");
+
+                    connection.query(insertItem, [item, item.amount], function (err, results) {
+                        connection.release();
                         if (flashUtils.isDatabaseError(req, res, '/', err))
                             return;
 
                         flashUtils.successMessage(req, res, '/', 'You\'ve added ' + item.name + "(" + item.amount + ") to your inventory!");
                     });
                 });
-            }).catch(function(err) {
+            }).catch(function (err) {
                 if (err)
                     flashUtils.errorMessage(req, res, '/', 'No image found for your item');
             });

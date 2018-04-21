@@ -10,8 +10,12 @@ var session = require('express-session')
 //============================= Letting express use them =============================
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.use(express.static(__dirname + "/public"));
+
 app.use(flash());
+
 app.use(session({
     secret: 'supersecret',
     resave: false,
@@ -32,24 +36,34 @@ var pool = mysql.createPool(config.db);
 
 //============================= Routes =============================
 
-var indexRoutes = require("./routes/indexRoutes")(pool);
-var searchRoutes = require("./routes/searchRoutes")(pool);
-var deleteRoutes = require("./routes/deleteRoutes")(pool);
-var miscRoutes = require("./routes/miscRoutes")();
+// Index
 
+var indexRoutes = require("./routes/indexRoutes")(pool);
 app.use("/", indexRoutes);
+
+// Inventory
+
+var searchRoutes = require("./routes/searchRoutes")(pool);
 app.use("/search", searchRoutes);
+
+var deleteRoutes = require("./routes/deleteRoutes")(pool);
 app.use("/delete", deleteRoutes);
+
+// Misc
+
+var miscRoutes = require("./routes/miscRoutes")();
 app.use("*", miscRoutes);
 
 //============================= Starting Server =============================
+
 app.listen(8080, function() {
     console.log("The server has started running, yahoo!");
 });
 
-var cleanup = require('./utils/nodeEnding').nodeEndingCode(nodeEndInstance);
-
 //============================= Ending Server =============================
+
+require('./utils/nodeEnding').nodeEndingCode(nodeEndInstance);
+
 function nodeEndInstance() {
     console.log("The pool has been closed.");
     pool.end();

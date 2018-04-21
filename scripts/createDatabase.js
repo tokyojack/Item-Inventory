@@ -2,9 +2,8 @@ var mysql = require('mysql');
 var config = require('../config');
 
 var connection = mysql.createConnection(config.db);
-var tableName = config.tableName;
 
-connection.query('CREATE TABLE `' + tableName + '` ( \
+connection.query('CREATE TABLE `inventory` ( \
  `name` varchar(255) NOT NULL, \
  `amount` int(11) NOT NULL, \
  PRIMARY KEY (`name`) \

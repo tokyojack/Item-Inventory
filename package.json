@@ -1,5 +1,5 @@
 {
-  "name": "Item_Inventory",
+  "name": "item_inventory",
   "version": "1.0.0",
   "description": "Have an inventory of items where you can add, remove and search items.",
   "main": "index.js",

@@ -6,6 +6,5 @@ module.exports = {
         password: '',
         database: '',
         debug: false
-    },
-    tableName: 'inventory'
+    }
 };

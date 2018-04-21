@@ -1,0 +1,1 @@
+ INSERT INTO inventory SET ? ON DUPLICATE KEY UPDATE amount = amount + ?
